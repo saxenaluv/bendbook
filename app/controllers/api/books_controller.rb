@@ -43,7 +43,13 @@ def create
   mp = parse_multi_params(request)
   puts "mp = #{mp.inspect}"
   puts "Lets create the books"
-     #process_params(mp[:t])
+  Book.persist(mp)
+
+  puts "What are the books = #{Book.all}"
+
+
+
+
     p params.inspect
     respond_to do |format|
     if true
