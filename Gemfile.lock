@@ -71,6 +71,7 @@ GEM
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     multi_json (1.11.2)
+    multipart-parser (0.1.1)
     mysql (2.9.1)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
@@ -147,6 +148,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)
   jquery-rails
+  multipart-parser (~> 0.1.1)
   mysql
   rails (= 4.2.4)
   sass-rails (~> 5.0)
