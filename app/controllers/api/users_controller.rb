@@ -6,7 +6,7 @@ class Api::UsersController < ApplicationController
   after_filter :add_headers
 
 
-#For queries like /user
+
 def fetch_user
     @user = User.find_by_id(params[:id])
 end
@@ -16,9 +16,9 @@ end
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, DELETE, PUT'
   end
 
-  #For queries like /user
+  #For queries like /user? Generic query
   def index
-    @users = User.all
+    @users = User.find_by_email(params[:email_id])
     p "index"
     respond_to do |format|
       p format.inspect
@@ -26,11 +26,11 @@ end
     end
   end
 
-
+#For queries like /user/{id}
   def show
     respond_to do |format|
       format.json { render json: @user }
-      format.xml { render xml: @user }
+
     end
   end
 
