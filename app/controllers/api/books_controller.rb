@@ -2,15 +2,13 @@ class Api::BooksController < ApplicationController
   require 'multipart_parser/reader'
   #http_basic_authenticate_with :name => "myfinance", :password => "credit123"
 
-
-
-  before_filter :fetch_user, :except => [:index, :create]
+  before_filter :fetch_user, :except => [:create]
   after_filter :add_headers
 
 
 
 def fetch_user
-    @user = User.find_by_id(params[:id])
+    @books = Book.where(:user_id => User.get_user_id(params[:email_id])).all
 end
 
   def add_headers
@@ -18,17 +16,35 @@ end
     response.headers['Access-Control-Allow-Methods'] = 'GET, POST, DELETE, PUT'
   end
 
-  #For queries like /user? Generic query
+  #For queries like /books? Generic query
   def index
-    @users = User.find_by_email(params[:email_id])
-    p "index"
-    respond_to do |format|
-      p format.inspect
-      format.json { render json: @users }
+    arr = []
+    @books.each do |book|
+      arr <<
+          {
+              :id => book.id,
+              :title => book.title,
+              :author => book.author,
+              :edition => book.edition,
+              :type => book.type,
+              :city => book.city,
+              :location => book.location,
+              :institute => book.institute,
+              :post_for => book.post_for,
+              :market_price => book.market_price,
+              :img_data => Base64.encode64(book.img)
+          }
     end
+
+    p "index"
+    render json: arr, status: :ok
+    #respond_to do |format|
+    #  p format.inspect
+    #  format.json { render json: {success : true} }
+    #end
   end
 
-#For queries like /user/{id}
+#For queries like /books/{id}
   def show
     respond_to do |format|
       format.json { render json: @user }
