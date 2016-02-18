@@ -18,7 +18,7 @@ end
 
   #For queries like /user? Generic query
   def index
-    @users = User.find_by_email(params[:email_id])
+    @users = User.find_by_email(params[:email])
     p "index"
     respond_to do |format|
       p format.inspect
