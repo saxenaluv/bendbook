@@ -8,7 +8,7 @@ class Api::BooksController < ApplicationController
 
 
 def fetch_user
-    @books = Book.where(:user_id => User.get_user_id(params[:email_id])).all
+    @books = Book.where(:user_id => params[:user_id]).all
 end
 
   def add_headers
@@ -26,7 +26,7 @@ end
               :title => book.title,
               :author => book.author,
               :edition => book.edition,
-              :type => book.type,
+              :type => book.book_type,
               :city => book.city,
               :location => book.location,
               :institute => book.institute,

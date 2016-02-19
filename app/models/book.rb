@@ -18,7 +18,9 @@ class Book < ActiveRecord::Base
                  :edition => data[:edition],
                  :img => data[:file],
                  :special_note => data[:specialNote],
-                 :user_id => User.get_user_id(data[:user_id])
+                 :user_id => data[:user_id],
+                 :description => data[:description],
+                :category => data[:category]
 
   end
 
