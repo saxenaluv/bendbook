@@ -18,7 +18,7 @@ end
 
   #For queries like /user? Generic query
   def index
-    @users = User.find_by_email(params[:email_id])
+    @users = User.find_by_email(params[:email])
     p "index"
     respond_to do |format|
       p format.inspect
@@ -35,8 +35,10 @@ end
   end
 
   def create
-    @user = User.new(params[:user])
-    @user.temp_password = Devise.friendly_token
+    puts "Lets start the game..."
+    @user = User.persist(request);
+    #@user = User.new(params[:user])
+    #@user.temp_password = Devise.friendly_token
     respond_to do |format|
       if @user.save
         format.json { render json: @user, status: :created }
