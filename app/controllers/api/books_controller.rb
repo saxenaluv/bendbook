@@ -8,11 +8,7 @@ class Api::BooksController < ApplicationController
 
 
 def fetch_user
-<<<<<<< HEAD
     @books = Book.where(:user_id => params[:user_id]).all
-=======
-    @books = Book.where(:user_id => User.get_user_id(params[:email_id])).all
->>>>>>> new_master
 end
 
   def add_headers
@@ -30,23 +26,15 @@ end
               :title => book.title,
               :author => book.author,
               :edition => book.edition,
-<<<<<<< HEAD
               :type => book.book_type,
-=======
-              :type => book.type,
->>>>>>> new_master
               :city => book.city,
               :location => book.location,
               :institute => book.institute,
               :post_for => book.post_for,
               :market_price => book.market_price,
-<<<<<<< HEAD
               :img_data => Base64.encode64(book.img),
               :special_note => book.special_note,
               :description => book.description
-=======
-              :img_data => Base64.encode64(book.img)
->>>>>>> new_master
           }
     end
 
@@ -73,7 +61,6 @@ def create
   mp = parse_multi_params(request)
   puts "mp = #{mp.inspect}"
   puts "Lets create the books"
-<<<<<<< HEAD
   book = Book.persist(mp)
 
   #puts "What are the books = #{Book.all}"
@@ -97,25 +84,6 @@ def create
  }
 
   render json: response , status: :created
-=======
-  Book.persist(mp)
-
-  puts "What are the books = #{Book.all}"
-
-
-
-
-    p params.inspect
-    respond_to do |format|
-    if true
-      format.json { render json: @user, status: :created }
-      format.xml { render xml: @user, status: :created }
-    else
-      format.json { render json: @user.errors, status: :unprocessable_entity }
-      format.xml { render xml: @user.errors, status: :unprocessable_entity }
-    end
-  end
->>>>>>> new_master
 
 end
 
