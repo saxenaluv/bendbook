@@ -32,7 +32,9 @@ end
               :institute => book.institute,
               :post_for => book.post_for,
               :market_price => book.market_price,
-              :img_data => Base64.encode64(book.img)
+              :img_data => Base64.encode64(book.img),
+              :special_note => book.special_note,
+              :description => book.description
           }
     end
 
@@ -59,23 +61,29 @@ def create
   mp = parse_multi_params(request)
   puts "mp = #{mp.inspect}"
   puts "Lets create the books"
-  Book.persist(mp)
+  book = Book.persist(mp)
 
-  puts "What are the books = #{Book.all}"
+  #puts "What are the books = #{Book.all}"
+  puts "Book = "
+  puts "#{book}"
 
+  response = {
+                :id => book.id,
+                :title => book.title,
+                :author => book.author,
+                :edition => book.edition,
+                :type => book.book_type,
+                :city => book.city,
+                :location => book.location,
+                :institute => book.institute,
+                :post_for => book.post_for,
+                :market_price => book.market_price,
+                :img_data => Base64.encode64(book.img),
+                :special_note => book.special_note,
+                :description => book.description
+ }
 
-
-
-    p params.inspect
-    respond_to do |format|
-    if true
-      format.json { render json: @user, status: :created }
-      format.xml { render xml: @user, status: :created }
-    else
-      format.json { render json: @user.errors, status: :unprocessable_entity }
-      format.xml { render xml: @user.errors, status: :unprocessable_entity }
-    end
-  end
+  render json: response , status: :created
 
 end
 

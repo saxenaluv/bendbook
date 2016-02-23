@@ -8,4 +8,14 @@ class User < ActiveRecord::Base
   #
   #  end
 
+  def self.persist params
+
+    puts "params = #{params}"
+
+
+    User.create! :first_name => params[:first_name],
+                 :last_name => params[:last_name],
+                 :email => params[:email_id]
+  end
+
 end

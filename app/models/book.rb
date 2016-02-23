@@ -5,7 +5,7 @@ class Book < ActiveRecord::Base
   def self.persist(data)
     puts "Lets print all books "
 
-    Book.create! :title => data[:title],
+    book = Book.create! :title => data[:title],
                  :author => data[:author],
                  :edition => data[:edition],
                  :market_price => data[:mrp_price],
@@ -20,7 +20,11 @@ class Book < ActiveRecord::Base
                  :special_note => data[:specialNote],
                  :user_id => data[:user_id],
                  :description => data[:description],
-                :category => data[:category]
+                 :category => data[:category]
+
+    puts "book = #{book}"
+
+    return book;
 
   end
 

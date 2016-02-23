@@ -34,18 +34,11 @@ end
     end
   end
 
+
   def create
-    @user = User.new(params[:user])
-    @user.temp_password = Devise.friendly_token
-    respond_to do |format|
-      if @user.save
-        format.json { render json: @user, status: :created }
-        format.xml { render xml: @user, status: :created }
-      else
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-        format.xml { render xml: @user.errors, status: :unprocessable_entity }
-      end
-    end
+    puts "request = #{request.body.inspect}"
+    @user = User.persist(params)
+    #@user.temp_password = Devise.friendly_token
   end
 
   def update
