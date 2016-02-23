@@ -14,3 +14,6 @@ require "rubygems"
 require "bundler/setup"
 
 load Gem.bin_path("rake", "rake")
+require_relative '../config/boot'
+require 'rake'
+Rake.application.run
