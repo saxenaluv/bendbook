@@ -36,7 +36,7 @@ end
 
   def create
     puts "Lets start the game..."
-    @user = User.persist(request);
+    @user = User.create_user(request);
     #@user = User.new(params[:user])
     #@user.temp_password = Devise.friendly_token
     respond_to do |format|
