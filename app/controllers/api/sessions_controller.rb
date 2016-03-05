@@ -2,7 +2,7 @@ class Api::SessionsController < ApplicationController
   #http_basic_authenticate_with :name => "myfinance", :password => "credit123"
 
   skip_before_filter :authenticate_user! # we do not need devise authentication here
-  before_filter :fetch_session, :except => [:index, :create]
+  before_filter :fetch_session, :except => [:index, :create, :update]
   after_filter :add_headers
 
 
@@ -49,26 +49,18 @@ class Api::SessionsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @sessions.update_attributes(params[:session])
-        format.json { head :no_content, status: :ok }
-        format.xml { head :no_content, status: :ok }
-      else
-        format.json { render json: @sessions.errors, status: :unprocessable_entity }
-        format.xml { render xml: @sessions.errors, status: :unprocessable_entity }
-      end
-    end
+
+    puts "request = #{request}"
+
+
   end
 
   def destroy
+    puts "request = #{request}"
+    puts "params[:id] = #{params[:id]}"
+    Session.find_by_session_token(params[:id]).destroy
     respond_to do |format|
-      if @sessions.destroy
-        format.json { head :no_content, status: :ok }
-        format.xml { head :no_content, status: :ok }
-      else
-        format.json { render json: @sessions.errors, status: :unprocessable_entity }
-        format.xml { render xml: @sessions.errors, status: :unprocessable_entity }
-      end
+        format.json { render json: nil, status: :ok }
     end
   end
 end
