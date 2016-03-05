@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       post :is_sold, on: :member, :defaults => { :format => 'json' }
    end
    resources :sessions, :defaults => { :format => 'json' }
+   resources :sessions do
+      post :delete, on: :member, :defaults => { :format => 'json' }
+    end
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
