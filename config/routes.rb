@@ -3,6 +3,9 @@ Rails.application.routes.draw do
   namespace :api do
    resources :users, :defaults => { :format => 'json' }
    resources :books, :defaults => { :format => 'json' }
+   resources :books do
+      post :is_sold, on: :member, :defaults => { :format => 'json' }
+   end
    resources :sessions, :defaults => { :format => 'json' }
   end
   # The priority is based upon order of creation: first created -> highest priority.

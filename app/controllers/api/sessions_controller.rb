@@ -63,4 +63,13 @@ class Api::SessionsController < ApplicationController
         format.json { render json: nil, status: :ok }
     end
   end
+
+  def delete
+      puts "request = #{request}"
+      puts "params[:id] = #{params[:id]}"
+      Session.find_by_session_token(params[:id]).destroy
+      respond_to do |format|
+          format.json { render json: nil, status: :ok }
+      end
+    end
 end

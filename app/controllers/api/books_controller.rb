@@ -18,6 +18,7 @@ end
 
   #For queries like /books? Generic query
   def index
+    @books = Book.where(:user_id => params[:user_id], :is_sold => false)
     arr = []
     @books.each do |book|
       arr <<
@@ -111,6 +112,30 @@ end
 
       parts
     end
+
+  def destroy
+    puts "request = #{request}"
+    puts "params[:id] = #{params[:id]}"
+    book = Book.find_by_id(params[:id])
+    book.is_sold = true
+    book.save!
+    respond_to do |format|
+        format.json { render json: nil, status: :ok }
+    end
+  end
+
+  def is_sold
+      puts "request = #{request}"
+      puts "params[:id] = #{params[:id]}"
+      book = Book.find_by_id(params[:id])
+      book.is_sold = true
+      book.save!
+      respond_to do |format|
+          format.json { render json: nil, status: :ok }
+      end
+    end
+
+
 
 
 
