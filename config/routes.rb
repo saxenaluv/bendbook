@@ -5,6 +5,7 @@ Rails.application.routes.draw do
    resources :books, :defaults => { :format => 'json' }
    resources :books do
       post :is_sold, on: :member, :defaults => { :format => 'json' }
+      post :update_views, on: :member, :defaults => { :format => 'json' }
    end
    resources :sessions, :defaults => { :format => 'json' }
    resources :sessions do

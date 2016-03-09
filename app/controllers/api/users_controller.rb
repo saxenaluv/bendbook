@@ -30,7 +30,6 @@ end
   def show
     respond_to do |format|
       format.json { render json: @user }
-
     end
   end
 

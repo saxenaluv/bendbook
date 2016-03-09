@@ -35,7 +35,9 @@ end
               :market_price => book.market_price,
               :img_data => Base64.encode64(book.img),
               :special_note => book.special_note,
-              :description => book.description
+              :description => book.description,
+              :category => book.category,
+              :views => book.views
           }
     end
 
@@ -49,10 +51,30 @@ end
 
 #For queries like /books/{id}
   def show
-    respond_to do |format|
-      format.json { render json: @user }
 
-    end
+    book = Book.find_by_id(params[:id])
+    b1 = {
+                  :id => book.id,
+                  :title => book.title,
+                  :author => book.author,
+                  :edition => book.edition,
+                  :type => book.book_type,
+                  :city => book.city,
+                  :location => book.location,
+                  :institute => book.institute,
+                  :post_for => book.post_for,
+                  :market_price => book.market_price,
+                  :img_data => Base64.encode64(book.img),
+                  :special_note => book.special_note,
+                  :description => book.description,
+                  :views => book.views,
+                  :category => book.category
+              }
+
+    #Return no. of views also
+
+    render json: b1, status: :ok
+
   end
 
 
@@ -133,7 +155,17 @@ end
       respond_to do |format|
           format.json { render json: nil, status: :ok }
       end
+  end
+
+  def update_views
+    puts "update_views = #{request}"
+    book = Book.find_by_id(params[:id])
+    book.views = book.views + 1
+    book.save!
+    respond_to do |format|
+        format.json { render json: nil, status: :ok }
     end
+  end
 
 
 
