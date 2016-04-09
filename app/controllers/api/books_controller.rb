@@ -24,6 +24,14 @@ end
 
     end
 
+    params[:page_no] = 1 if params[:page_no].nil?
+    params[:page_size] = 20 if params[:page_size].nil?
+
+    page_no = params[:page_no]
+    page_size = params[:page_size]
+    offset = (page_no-1)*page_size
+
+
     conditions = get_params(params,[:id,:title,:author,:type , :city, :location, :institute, :category, :user_id, :is_sold])
     conditions[:id] = params[:id].split ',' if !params[:id].nil?
     conditions[:title] = params[:title].split ',' if !params[:title].nil?
@@ -39,7 +47,7 @@ end
     @books = nil
 
     begin
-    @books = Book.where(conditions)
+    @books = Book.where(conditions).offset(offset).limit(page_size)
     rescue ActiveRecord::RecordNotFound => e
       @books = []
     end
