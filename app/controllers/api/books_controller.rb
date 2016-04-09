@@ -18,7 +18,35 @@ end
 
   #For queries like /books? Generic query
   def index
-    @books = Book.where(:user_id => params[:user_id], :is_sold => false)
+
+    if params.nil?
+      raise "Params Not passed"
+
+    end
+
+    conditions = get_params(params,[:id,:title,:author,:type , :city, :location, :institute, :category, :user_id, :is_sold])
+    conditions[:id] = params[:id].split ',' if !params[:id].nil?
+    conditions[:title] = params[:title].split ',' if !params[:title].nil?
+    conditions[:author] = params[:author].split ',' if !params[:author].nil?
+    conditions[:type] = params[:type].split ',' if !params[:type].nil?
+    conditions[:location] = params[:location].split ',' if !params[:location].nil?
+    conditions[:institute] = params[:institute].split ',' if !params[:institute].nil?
+    conditions[:category] = params[:category].split ',' if !params[:category].nil?
+    conditions[:user_id] = params[:user_id].split ',' if !params[:user_id].nil?
+
+    conditions[:is_sold] = false if(conditions[:is_sold] == nil)
+
+    @books = nil
+
+    begin
+    @books = Book.where(conditions)
+    rescue ActiveRecord::RecordNotFound => e
+      @books = []
+    end
+
+    p "size = #{@books.size}"
+
+
     arr = []
     @books.each do |book|
       arr <<
@@ -183,6 +211,15 @@ end
     respond_to do |format|
         format.json { render json: nil, status: :ok }
     end
+  end
+
+  private
+  def get_params params,fields
+    res = {}
+    fields.each do |f|
+      res[f] = params[f] if params[f]
+    end
+    res
   end
 
 
