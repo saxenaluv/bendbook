@@ -84,6 +84,10 @@ def create
   mp = parse_multi_params(request)
   puts "mp = #{mp.inspect}"
   puts "Lets create the books"
+  if(mp[:file].is_a?(Array) )
+    mp[:file] = mp[:file].join;
+  end
+
   book = Book.persist(mp)
 
   #puts "What are the books = #{Book.all}"
