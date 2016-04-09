@@ -5,7 +5,7 @@ class Api::BooksController < ApplicationController
   before_filter :fetch_user, :except => [:create]
   after_filter :add_headers
 
-
+DEFAULT_IMG_PATH = File.expand_path("../../../book_image-not-available.gif")
 
 def fetch_user
     @books = Book.where(:user_id => params[:user_id]).all
@@ -52,7 +52,15 @@ end
 #For queries like /books/{id}
   def show
 
+
+
     book = Book.find_by_id(params[:id])
+
+    if(book.img == nil || book.img == '')
+      image = File.open(DEFAULT_IMG_PATH, 'rb') {|file| file.read }
+      book.img = image
+    end
+
     b1 = {
                   :id => book.id,
                   :title => book.title,
@@ -87,6 +95,12 @@ def create
   if(mp[:file].is_a?(Array) )
     mp[:file] = mp[:file].join;
   end
+
+  if(mp[:file] == nil || mp[:file] == '')
+    image = File.open(DEFAULT_IMG_PATH, 'rb') {|file| file.read }
+    mp[:file] = image
+  end
+
 
   book = Book.persist(mp)
 
