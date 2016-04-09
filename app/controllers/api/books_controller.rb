@@ -5,7 +5,7 @@ class Api::BooksController < ApplicationController
   before_filter :fetch_user, :except => [:create]
   after_filter :add_headers
 
-DEFAULT_IMG_PATH = File.expand_path("../../../book_image-not-available.gif")
+DEFAULT_IMG_PATH = File.expand_path("../../../../book_image-not-available.gif",__FILE__)
 
 def fetch_user
     @books = Book.where(:user_id => params[:user_id]).all
