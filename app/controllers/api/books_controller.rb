@@ -32,7 +32,7 @@ end
     offset = (page_no-1)*page_size
 
 
-    conditions = get_params(params,[:id,:title,:author,:type , :city, :location, :institute, :category, :user_id, :is_sold])
+    conditions = get_params(params,[:id,:title,:author,:type , :city, :location, :institute, :category, :user_id, :is_sold, :post_for])
     conditions[:id] = params[:id].split ',' if !params[:id].nil?
     conditions[:title] = params[:title].split ',' if !params[:title].nil?
     conditions[:author] = params[:author].split ',' if !params[:author].nil?
@@ -41,10 +41,13 @@ end
     conditions[:institute] = params[:institute].split ',' if !params[:institute].nil?
     conditions[:category] = params[:category].split ',' if !params[:category].nil?
     conditions[:user_id] = params[:user_id].split ',' if !params[:user_id].nil?
+    conditions[:post_for] = params[:post_for].split ',' if !params[:post_for].nil?
 
     conditions[:is_sold] = false if(conditions[:is_sold] == nil)
 
     @books = nil
+
+    p "Books = #{conditions}"
 
     begin
     @books = Book.where(conditions).offset(offset).limit(page_size)
