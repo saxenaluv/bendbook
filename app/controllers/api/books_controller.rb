@@ -5,7 +5,7 @@ class Api::BooksController < ApplicationController
   before_filter :fetch_user, :except => [:create]
   after_filter :add_headers
 
-
+DEFAULT_IMG_PATH = File.expand_path("../../../../book_image-not-available.gif",__FILE__)
 
 def fetch_user
     @books = Book.where(:user_id => params[:user_id]).all
@@ -18,7 +18,46 @@ end
 
   #For queries like /books? Generic query
   def index
-    @books = Book.where(:user_id => params[:user_id], :is_sold => false)
+
+    if params.nil?
+      raise "Params Not passed"
+
+    end
+
+    params[:page_no] = 1 if params[:page_no].nil?
+    params[:page_size] = 20 if params[:page_size].nil?
+
+    page_no = params[:page_no]
+    page_size = params[:page_size]
+    offset = (page_no-1)*page_size
+
+
+    conditions = get_params(params,[:id,:title,:author,:type , :city, :location, :institute, :category, :user_id, :is_sold, :post_for])
+    conditions[:id] = params[:id].split ',' if !params[:id].nil?
+    conditions[:title] = params[:title].split ',' if !params[:title].nil?
+    conditions[:author] = params[:author].split ',' if !params[:author].nil?
+    conditions[:type] = params[:type].split ',' if !params[:type].nil?
+    conditions[:location] = params[:location].split ',' if !params[:location].nil?
+    conditions[:institute] = params[:institute].split ',' if !params[:institute].nil?
+    conditions[:category] = params[:category].split ',' if !params[:category].nil?
+    conditions[:user_id] = params[:user_id].split ',' if !params[:user_id].nil?
+    conditions[:post_for] = params[:post_for].split ',' if !params[:post_for].nil?
+
+    conditions[:is_sold] = false if(conditions[:is_sold] == nil)
+
+    @books = nil
+
+    p "Books = #{conditions}"
+
+    begin
+    @books = Book.where(conditions).offset(offset).limit(page_size)
+    rescue ActiveRecord::RecordNotFound => e
+      @books = []
+    end
+
+    p "size = #{@books.size}"
+
+
     arr = []
     @books.each do |book|
       arr <<
@@ -52,7 +91,15 @@ end
 #For queries like /books/{id}
   def show
 
+
+
     book = Book.find_by_id(params[:id])
+
+    if(book.img == nil || book.img == '')
+      image = File.open(DEFAULT_IMG_PATH, 'rb') {|file| file.read }
+      book.img = image
+    end
+
     b1 = {
                   :id => book.id,
                   :title => book.title,
@@ -84,6 +131,16 @@ def create
   mp = parse_multi_params(request)
   puts "mp = #{mp.inspect}"
   puts "Lets create the books"
+  if(mp[:file].is_a?(Array) )
+    mp[:file] = mp[:file].join;
+  end
+
+  if(mp[:file] == nil || mp[:file] == '')
+    image = File.open(DEFAULT_IMG_PATH, 'rb') {|file| file.read }
+    mp[:file] = image
+  end
+
+
   book = Book.persist(mp)
 
   #puts "What are the books = #{Book.all}"
@@ -165,6 +222,15 @@ end
     respond_to do |format|
         format.json { render json: nil, status: :ok }
     end
+  end
+
+  private
+  def get_params params,fields
+    res = {}
+    fields.each do |f|
+      res[f] = params[f] if params[f]
+    end
+    res
   end
 
 
