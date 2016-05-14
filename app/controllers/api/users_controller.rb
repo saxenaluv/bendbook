@@ -62,14 +62,48 @@ end
   end
 
   def destroy
+    puts "request = #{request}"
+    puts "params[:id] = #{params[:id]}"
+    User.find_by_email(params[:id]).destroy
     respond_to do |format|
-      if @user.destroy
-        format.json { head :no_content, status: :ok }
-        format.xml { head :no_content, status: :ok }
-      else
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-        format.xml { render xml: @user.errors, status: :unprocessable_entity }
-      end
+      format.json { render json: params[:id].to_s() + 'deleted!', status: :ok }
     end
   end
+
+  def delete
+    puts "request = #{request}"
+    puts "params[:id] = #{params[:id]}"
+    User.find_by_email(params[:id]).destroy
+    respond_to do |format|
+      format.json { render json: params[:id].to_s() + 'deleted!', status: :ok }
+    end
+  end
+
+  def send_mail
+    puts "request = #{request}"
+    User.send_forgot_password_mail(request);
+    respond_to do |format|
+      format.json { render json: @user, status: :ok }
+      format.xml { render json: @user, status: :ok }
+    end
+  end
+
+  def update_password
+    puts "request = #{request}"
+    User.update_password_for_user(request);
+    respond_to do |format|
+      format.json { render json: @user, status: :ok }
+      format.xml { render json: @user, status: :ok }
+    end
+  end
+
+  def update_service_token
+    puts "request = #{request}"
+    User.update_service_token_for_user(request);
+    respond_to do |format|
+      format.json { render json: @user, status: :ok }
+      format.xml { render json: @user, status: :ok }
+    end
+  end
+
 end

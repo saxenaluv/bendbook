@@ -49,10 +49,18 @@ class Api::SessionsController < ApplicationController
   end
 
   def update
+    respond_to do |format|
+      format.json { render json: nil, status: :ok }
+    end
+  end
 
-    puts "request = #{request}"
-
-
+  def update_session_token
+    puts "Request : #{request.parameters.inspect}"
+    @sessions = Session.update_session_for_user(request);
+    respond_to do |format|
+      format.json { render json: @sessions, status: :ok }
+      format.xml { render json: @sessions, status: :ok }
+    end
   end
 
   def destroy

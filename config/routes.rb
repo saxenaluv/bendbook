@@ -2,6 +2,10 @@ Rails.application.routes.draw do
 
   namespace :api do
    resources :users, :defaults => { :format => 'json' }
+   # put "users/:email/delete" => "users#delete", :defaults => { :format => 'json' }
+   resources :users do
+     post :delete, on: :member, :defaults => { :format => 'json' }
+   end
    resources :books, :defaults => { :format => 'json' }
    resources :books do
       post :is_sold, on: :member, :defaults => { :format => 'json' }
@@ -10,7 +14,11 @@ Rails.application.routes.draw do
    resources :sessions, :defaults => { :format => 'json' }
    resources :sessions do
       post :delete, on: :member, :defaults => { :format => 'json' }
-    end
+   end
+   match 'sessions/update_session_token' => 'sessions#update_session_token', :via => :post, :defaults => { :format => 'json' }
+   match 'users/send_mail' => 'users#send_mail', :via => :post, :defaults => { :format => 'json' }
+   match 'users/update_password' => 'users#update_password', :via => :post, :defaults => { :format => 'json' }
+   match 'users/update_service_token' => 'users#update_service_token', :via => :post, :defaults => { :format => 'json' }
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
