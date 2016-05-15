@@ -42,7 +42,6 @@ end
     conditions[:category] = params[:category].split ',' if !params[:category].nil?
     conditions[:user_id] = params[:user_id].split ',' if !params[:user_id].nil?
     conditions[:post_for] = params[:post_for].split ',' if !params[:post_for].nil?
-
     conditions[:is_sold] = false if(conditions[:is_sold] == nil)
 
     @books = nil
@@ -87,6 +86,23 @@ end
     #  format.json { render json: {success : true} }
     #end
   end
+
+  def get_unique_search_params
+
+    title_lists = Book.pluck(:title).uniq
+
+    author_lists = Book.pluck(:author).uniq
+
+    arr = title_lists.concat(author_lists)
+
+    p "arr = #{arr}"
+
+    #map = {:titles => title_lists,
+    #:author => author_lists}
+
+    render json: arr, status: :ok
+  end
+
 
 #For queries like /books/{id}
   def show
@@ -232,6 +248,7 @@ end
     end
     res
   end
+
 
 
 
