@@ -34,6 +34,8 @@ end
     conditions[:active] = params[:active].split ',' if !params[:active].nil?
     conditions[:contact_no] = params[:contact_no].split ',' if !params[:contact_no].nil?
 
+    hash = params[:hash].split ',' if !params[:hash].nil?
+
     p "Users = #{conditions}"
 
     begin
@@ -44,12 +46,22 @@ end
 
     p "User : #{user.inspect}"
 
-    res = {
-                   :id => user.id,
-                   :first_name => user.first_name,
-                   :email => user.email,
-                   :contact_no => user.contact_no
-    }
+    if hash
+      res = {
+          :id => user.id,
+          :email => user.email,
+          :hash_value => user.password,
+          :active => user.active,
+          :authorize => user.authorize
+      }
+    else
+      res = {
+          :id => user.id,
+          :first_name => user.first_name,
+          :email => user.email,
+          :contact_no => user.contact_no
+      }
+    end
 
     p "index"
     render json: res, status: :ok

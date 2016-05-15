@@ -14,9 +14,10 @@ class User < ActiveRecord::Base
                  :last_name => data[:last_name],
                  :email => data[:email],
                  :password => data[:password],
-                 :password_confirmation => data[:confirm_password],
+                 :password_confirmation_token => data[:password_confirmation_token],
                  :temp_password => data[:temp_password],
                  :active => data[:is_active],
+                 :authorize => data[:is_authorize],
                  :contact_no => data[:contact_no],
                  :created_at => data[:created_at],
                  :updated_at => data[:updated_at]
@@ -44,6 +45,7 @@ class User < ActiveRecord::Base
     puts "Request : #{data.parameters.inspect}"
     user = User.find_by_email(data[:email]);
     user.password = data[:password]
+    user.password_confirmation_token = nil
     user.save!
   end
 
