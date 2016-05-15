@@ -17,13 +17,42 @@ end
   end
 
   #For queries like /user? Generic query
+  #Generic GET for user
   def index
-    @users = User.find_by_email(params[:email])
-    p "index"
-    respond_to do |format|
-      p format.inspect
-      format.json { render json: @users }
+
+    if params.nil?
+      raise "Params Not passed"
     end
+
+    conditions = get_params(params,[:id, :first_name, :last_name, :email, :password, :password_confirmation_token, :active, :contact_no])
+    conditions[:id] = params[:id].split ',' if !params[:id].nil?
+    conditions[:first_name] = params[:first_name].split ',' if !params[:first_name].nil?
+    conditions[:last_name] = params[:last_name].split ',' if !params[:last_name].nil?
+    conditions[:email] = params[:email].split ',' if !params[:email].nil?
+    conditions[:password] = params[:password].split ',' if !params[:password].nil?
+    conditions[:password_confirmation_token] = params[:password_confirmation_token].split ',' if !params[:password_confirmation_token].nil?
+    conditions[:active] = params[:active].split ',' if !params[:active].nil?
+    conditions[:contact_no] = params[:contact_no].split ',' if !params[:contact_no].nil?
+
+    p "Users = #{conditions}"
+
+    begin
+      user = User.where(conditions).first
+    rescue ActiveRecord::RecordNotFound => e
+      user = []
+    end
+
+    p "User : #{user.inspect}"
+
+    res = {
+                   :id => user.id,
+                   :first_name => user.first_name,
+                   :email => user.email,
+                   :contact_no => user.contact_no
+    }
+
+    p "index"
+    render json: res, status: :ok
   end
 
 #For queries like /user/{id}
@@ -36,8 +65,6 @@ end
   def create
     puts "Lets start the game..."
     @user = User.create_user(request);
-    #@user = User.new(params[:user])
-    #@user.temp_password = Devise.friendly_token
     respond_to do |format|
       if @user.save
         format.json { render json: @user, status: :created }
@@ -104,6 +131,15 @@ end
       format.json { render json: @user, status: :ok }
       format.xml { render json: @user, status: :ok }
     end
+  end
+
+  private
+  def get_params params,fields
+    res = {}
+    fields.each do |f|
+      res[f] = params[f] if params[f]
+    end
+    res
   end
 
 end
