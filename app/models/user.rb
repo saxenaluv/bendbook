@@ -27,11 +27,11 @@ class User < ActiveRecord::Base
     puts "Request : #{data.parameters.inspect}"
     link = 'http://localhost:8000/index.html#/forgotPassword/' + data[:service_token]
     mail = Mail.new do
-      body 'Hi'+ "\n" + 'Click on below link to reset your password.' + "\n"+ '<a href="' + link + '">' + link + '</a>'
+      body 'Hi'+ "\n" + 'Click on below link to reset your password.' + "\n"+ link
     end
 
     #Setting Mail contents
-    mail['from'] = 'no-reply@gmail.com'
+    mail['from'] = 'no-reply@bookstore.com'
     mail[:to] = data[:email]
     mail.subject = 'Forgot Password Link'
 
