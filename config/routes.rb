@@ -19,6 +19,9 @@ Rails.application.routes.draw do
    match 'users/send_mail' => 'users#send_mail', :via => :post, :defaults => { :format => 'json' }
    match 'users/update_password' => 'users#update_password', :via => :post, :defaults => { :format => 'json' }
    match 'users/update_service_token' => 'users#update_service_token', :via => :post, :defaults => { :format => 'json' }
+
+   match 'books/search/get_unique_search_params' => 'books#get_unique_search_params', :via => :get
+
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
