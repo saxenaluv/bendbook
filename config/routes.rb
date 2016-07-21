@@ -22,6 +22,9 @@ Rails.application.routes.draw do
 
    match 'books/search/get_unique_search_params' => 'books#get_unique_search_params', :via => :get
 
+   match 'books/search/get_book_for_search_params' => 'books#get_book_for_search_params', :via => :get
+
+
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

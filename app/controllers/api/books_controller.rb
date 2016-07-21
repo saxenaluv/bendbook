@@ -103,6 +103,60 @@ end
     render json: arr, status: :ok
   end
 
+  def get_book_for_search_params
+
+    data = params[:data]
+    arr = []
+    arr1 = Book.where(:title => data)
+
+    arr1.each do |book|
+      arr <<
+          {
+              :id => book.id,
+              :title => book.title,
+              :author => book.author,
+              :edition => book.edition,
+              :type => book.book_type,
+              :city => book.city,
+              :location => book.location,
+              :institute => book.institute,
+              :post_for => book.post_for,
+              :market_price => book.market_price,
+              :img_data => Base64.encode64(book.img),
+              :special_note => book.special_note,
+              :description => book.description,
+              :category => book.category,
+              :views => book.views
+          }
+    end
+
+    arr2 = Book.where(:author => data)
+
+    arr2.each do |book|
+      arr <<
+          {
+              :id => book.id,
+              :title => book.title,
+              :author => book.author,
+              :edition => book.edition,
+              :type => book.book_type,
+              :city => book.city,
+              :location => book.location,
+              :institute => book.institute,
+              :post_for => book.post_for,
+              :market_price => book.market_price,
+              :img_data => Base64.encode64(book.img),
+              :special_note => book.special_note,
+              :description => book.description,
+              :category => book.category,
+              :views => book.views
+          }
+    end
+
+    render json: arr, status: :ok
+
+  end
+
 
 #For queries like /books/{id}
   def show
