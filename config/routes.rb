@@ -23,6 +23,7 @@ Rails.application.routes.draw do
    match 'books/search/get_unique_search_params' => 'books#get_unique_search_params', :via => :get
 
    match 'books/search/get_book_for_search_params' => 'books#get_book_for_search_params', :via => :get
+   match 'books/search/get_default_books' => 'books#get_default_books', :via => :get
 
 
   end
