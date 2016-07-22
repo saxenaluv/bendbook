@@ -120,7 +120,11 @@ end
 
   def send_mail
     puts "request = #{request}"
-    User.send_forgot_password_mail(request);
+    if request[:is_send_queries].present?
+        User.send_default_mail(request)
+    else
+      User.send_forgot_password_mail(request);
+    end
     respond_to do |format|
       format.json { render json: @user, status: :ok }
       format.xml { render json: @user, status: :ok }

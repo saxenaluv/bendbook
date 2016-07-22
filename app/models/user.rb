@@ -42,6 +42,25 @@ class User < ActiveRecord::Base
     mail.deliver
   end
 
+  def self.send_default_mail(data)
+    puts "Request : #{data.parameters.inspect}"
+
+    mail = Mail.new do
+      body 'Dear BookStore Team,'+ "\n\n" + 'User ' + data[:username] + ' has send below queries.' + "\n\n"+ data[:message] + "\n\n" + 'Thank You' + "\n" + 'BookStore Customer Care'
+    end
+
+    #Setting Mail contents
+    mail['from'] = data[:email]
+    mail[:to] = 'njain7242@gmail.com'
+    mail.subject = '[Critical] Queries From User ' + data[:username]
+
+    puts "mail content : #{mail.inspect}"
+    puts "mail Body : #{mail.body.inspect}"
+
+    mail.delivery_method :sendmail
+    mail.deliver
+  end
+
   def self.update_password_for_user(data)
     puts "Request : #{data.parameters.inspect}"
     user = User.find_by_email(data[:email]);
