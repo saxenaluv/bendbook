@@ -59,6 +59,10 @@ class User < ActiveRecord::Base
 
     mail.delivery_method :sendmail
     mail.deliver
+
+    Queries.add_queries data
+
+
   end
 
   def self.update_password_for_user(data)
